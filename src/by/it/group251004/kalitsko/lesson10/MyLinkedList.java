@@ -17,6 +17,39 @@ public class MyLinkedList<E> implements Deque<E> {
         }
     }
 
+    public String toString(){
+        Node currNode = this.head;
+
+        StringBuilder string = new StringBuilder("[");
+
+        while (currNode != null){
+            string.append(currNode.data);
+            currNode = currNode.next;
+
+            if (currNode != null)
+                string.append(", ");
+        }
+
+        string.append("]");
+        return string.toString();
+    }
+
+    @Override
+    public boolean add(E e) {
+        Node newNode = new Node(e);
+
+        if (tail == null)
+            head = newNode;
+        else {
+            tail.next = newNode;
+            newNode.prev = tail;
+        }
+        tail = newNode;
+
+        size++;
+        return true;
+    }
+
     @Override
     public void addFirst(E e) {
         Node newNode = new Node(e);
@@ -35,6 +68,24 @@ public class MyLinkedList<E> implements Deque<E> {
     @Override
     public void addLast(E e) {
         add(e);
+    }
+
+    @Override
+    public E poll() {
+        if (head == null)
+            return null;
+
+        Node node = head;
+        if (head.next == null){
+            head = null;
+            tail = null;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+
+        size--;
+        return node.data;
     }
 
     @Override
@@ -61,6 +112,11 @@ public class MyLinkedList<E> implements Deque<E> {
     }
 
     @Override
+    public E element() {
+        return head.data;
+    }
+
+    @Override
     public E getFirst() {
         return element();
     }
@@ -68,45 +124,6 @@ public class MyLinkedList<E> implements Deque<E> {
     @Override
     public E getLast() {
         return tail.data;
-    }
-
-    @Override
-    public boolean add(E e) {
-        Node newNode = new Node(e);
-
-        if (tail == null)
-            head = newNode;
-        else {
-            tail.next = newNode;
-            newNode.prev = tail;
-        }
-        tail = newNode;
-
-        size++;
-        return true;
-    }
-
-    @Override
-    public E poll() {
-        if (head == null)
-            return null;
-
-        Node node = head;
-        if (head.next == null){
-            head = null;
-            tail = null;
-        } else {
-            head = head.next;
-            head.prev = null;
-        }
-
-        size--;
-        return node.data;
-    }
-
-    @Override
-    public E element() {
-        return head.data;
     }
 
     @Override
@@ -158,20 +175,4 @@ public class MyLinkedList<E> implements Deque<E> {
         return size;
     }
 
-    public String toString(){
-        Node currNode = this.head;
-
-        StringBuilder string = new StringBuilder("[");
-
-        while (currNode != null){
-            string.append(currNode.data);
-            currNode = currNode.next;
-
-            if (currNode != null)
-                string.append(", ");
-        }
-
-        string.append("]");
-        return string.toString();
-    }
 }
